@@ -1,5 +1,11 @@
 const gameContent = {
     scenes: {
+        intro: {
+            description: "欢迎来到《仿生黄少会梦见电子马克思吗？》\n\n黄少来自四川东部或者是广东南部的一个小县城，他曾经在网上是特种兵，会越南语。爱好是看星际牛仔和玩全面战争：战锤，但是最近迫于生活，流落到了慢手公司，你将会决定他的工作生涯，也许还有爱情？",
+            choices: {
+                1: { text: "开始游戏", nextScene: "start" }
+            }
+        },
         start: {
             description: "黄少是慢手公司的一名审核员。今天早上，他拖着疲惫的身躯来到了公司，想起自己还欠着公司50块钱，心里更加郁闷。",
             choices: {
@@ -60,7 +66,7 @@ const gameContent = {
     }
 };
 
-let currentScene = 'start';
+let currentScene = 'intro';
 let coins = -50;
 let sanValue = 100;
 let inventory = [];
@@ -90,11 +96,26 @@ function updateScene() {
         choicesContainer.appendChild(button);
     });
     updateStats();
+    updateIntroVisibility();
 }
 
 function updateStats() {
-    document.getElementById('coins').innerText = `金币: ${coins}`;
-    document.getElementById('san').innerText = `SAN值: ${sanValue}`;
+    if (currentScene !== 'intro') {
+        document.getElementById('stats').style.display = 'flex';
+        document.getElementById('coins').innerText = `金币: ${coins}`;
+        document.getElementById('san').innerText = `SAN值: ${sanValue}`;
+    } else {
+        document.getElementById('stats').style.display = 'none';
+    }
+}
+
+function updateIntroVisibility() {
+    const introContainer = document.getElementById('intro-container');
+    if (currentScene === 'intro') {
+        introContainer.style.display = 'block';
+    } else {
+        introContainer.style.display = 'none';
+    }
 }
 
 function changeCoins(amount) {
@@ -143,7 +164,7 @@ function performAction(action) {
             }
             break;
         case 'restartGame':
-            currentScene = 'start';
+            currentScene = 'intro';
             coins = -50;
             sanValue = 100;
             inventory = [];
